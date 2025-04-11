@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./Assets/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>My Wallet tracker</title>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>My Wallet Tracker</h1>
+      </header>
+      <!--To show balances in top-->
+      <section class="balance">
+        <div class="totalincome">
+          <h3>Total Income</h3>
+          <span id="totalIncome">$0</span>
+        </div>
+        <div class="totalexpense">
+          <h3>Total Expense</h3>
+          <span id="totalExpense">$0</span>
+        </div>
+        <div class="netbalance">
+          <h3>Net Balance</h3>
+          <span id="netbalance">$0</span>
+        </div>
+      </section>
+      <!--Inputs getting from users-->
+      <form>
+        <p>
+          <input
+            type="text"
+            name="discrption"
+            id="discrptionInput"
+            placeholder="Enter Discrption"
+          />
+        </p>
+        <br />
+        <p>
+          <input
+            type="tel"
+            name="amount"
+            id="amountInput"
+            placeholder="Enter amount"
+          />
+        </p>
+        <br />
+        <select name="source" id="source">
+          <option value="income" id="income">Income</option>
+          <option value="expense" id="expense">Expense</option>
+        </select>
+        <br />
+        <!--to add entries and reset entries-->
+        <p>
+          <button type="submit">
+            <i class="fa-solid fa-square-plus" style="color: #74c0fc"></i>
+          </button>
+          <button type="reset">Reset</button>
+        </p>
+        <br />
+        <!--to Filter needed data-->
+        <p>
+          <input type="radio" name="all" id="all" />
+          <label for="all">All</label>
+          <input type="radio" name="all" id="incomeFilter" />
+          <label for="incomeFilter">Income</label>
+          <input type="radio" name="all" id="expenseFilter" />
+          <label for="expenseFilter">Expense</label>
+        </p>
+      </form>
+      <!--To read entries-->
+      <h3>Entries</h3>
+      <div id="entries"></div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
