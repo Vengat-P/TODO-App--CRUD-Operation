@@ -62,15 +62,17 @@ const createList = ()=>{
     data.map((ele,i)=>{
         return(
             trackList.innerHTML += `
-            <div id=${i}>
-            <span class="font-bold text-start">${ele.discrption}</span>
-            <span class="font-bold text-start">${ele.amount}</span>
-            <p class="font-bold text-start">${ele.source}</p>
-            <span class="option">
+            <div id=${i} class="w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
+            <div class="py-2 mt-2 mx-2">
+            <span class="font-bold text-start capitalize text-sky-900">${ele.discrption} :</span>
+            <span class="font-bold text-start ">${ele.amount}</span>
+            <p class="font-bold text-start capitalize text-sky-900">${ele.source}</p>
+            </div>
+            <span class="option flex flex-col gap-2 py-2 mt-2 mx-2">
             <i onclick="editTask(this)" class="fa-regular fa-pen-to-square"></i>
             <i onclick="deleteTask(this)" class="fa-solid fa-trash"></i>
             </span>
-            
+            </div>
             `
         )
     });
