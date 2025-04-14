@@ -1,113 +1,175 @@
-//! Get all input elements by id 
+//! Get all input elements by id
 
+const form = document.getElementById("form");
+const discrptionInput = document.getElementById("discrptionInput");
+const amountInput = document.getElementById("amountInput");
+const sourceInput = document.getElementById("sourceInput");
+const income = document.getElementById("income");
+const expense = document.getElementById("expense");
+const add = document.getElementById("add");
+const msg = document.getElementById("msg");
+const allFilter = document.getElementById("allFilter");
+const incomeFilter = document.getElementById("incomeFilter");
+const expenseFilter = document.getElementById("expenseFilter");
+const trackList = document.getElementById("trackList");
+const totalIncome = document.getElementById("totalIncome");
+const totalExpense = document.getElementById("totalExpense");
+const netBalance = document.getElementById("netBalance");
 
-const form = document.getElementById("form")
-const discrptionInput = document.getElementById("discrptionInput")
-const amountInput = document.getElementById("amountInput")
-const sourceInput = document.getElementById("sourceInput")
-const income = document.getElementById("income")
-const expense = document.getElementById("expense")
-const add = document.getElementById("add")
-const msg = document.getElementById("msg")
-const allFilter = document.getElementById("allFilter")
-const incomeFilter = document.getElementById("incomeFilter")
-const expenseFilter = document.getElementById("expenseFilter")
-const trackList = document.getElementById("trackList")
+//! formvalidation
 
-//! formvalidation 
-
-const formvalidation = ()=>{
-    if(
-        discrptionInput.value === "" ||
-        amountInput.value === ""
-    ) {
-        msg.innerHTML ="Kindly Enter All the Details 😥";
-    }
-    else {
-        msg.innerHTML = ""
-        //get data form here
-        getData();
-    }
+const formvalidation = () => {
+  if (discrptionInput.value === "" || amountInput.value === "") {
+    msg.innerHTML = "Kindly Enter All the Details 😥";
+  } else {
+    msg.innerHTML = "";
+    //get data form here
+    getData();
+  }
 };
 
 //!submit logic
 
-form.addEventListener("submit",(e)=>{
-    e.preventDefault();
-    formvalidation();
-})
-
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  formvalidation();
+});
 
 //! getting datas from input feild and stored it in array of object
 
-let data = [{}]
+let data = [{}];
 
-const getData = () =>{
-    data.push({
-        discrption: discrptionInput.value,
-        amount: amountInput.value,
-        source: sourceInput.value
-    });
+const getData = () => {
+  data.push({
+    discrption: discrptionInput.value,
+    amount: amountInput.value,
+    source: sourceInput.value,
+  });
 
-    //to save this data in localstorage
+  //to save this data in localstorage
 
-    localStorage.setItem("data", JSON.stringify(data))
-    createList();
-}
+  localStorage.setItem("data", JSON.stringify(data));
+  createList();
+  // updateincome()
+};
 
-//! create function for getting data from local storage 
+//! create function for getting data from local storage
 
-const createList = ()=>{
-    trackList.innerHTML = "";
-    data.map((ele,i)=>{
-        return(
-            trackList.innerHTML += `
+const createList = () => {
+  trackList.innerHTML = "";
+  data.map((ele, i) => {
+    return (trackList.innerHTML += `
             <div id=${i} class="w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
-            <div class="py-2 mt-2 mx-2">
-            <span class="font-bold text-start capitalize text-sky-900">${ele.discrption} :</span>
+            <span class="font-bold text-start capitalize text-sky-900">${ele.discrption}</span>
             <span class="font-bold text-start ">${ele.amount}</span>
             <p class="font-bold text-start capitalize text-sky-900">${ele.source}</p>
-            </div>
             <span class="option flex flex-col gap-2 py-2 mt-2 mx-2">
             <i onclick="editTask(this)" class="fa-regular fa-pen-to-square"></i>
-            <i onclick="deleteTask(this)" class="fa-solid fa-trash"></i>
+            <i onclick="deleteTask(this); createlist(); updateincome();" class="fa-solid fa-trash"></i>
             </span>
             </div>
-            `
-        )
-    });
-    resetForm();
-}
+            `);
+  });
+
+     const updateincome = ()=>{
+        totalIncome.innerHTML = "";
+        const incomearr = data.filter((ele) => {
+          if (`${ele.source}` === income.value) {
+            return true;
+          }
+        });
+        const currenttotal = incomearr.reduce((sum, ele) => {
+            return sum + parseInt(`${ele.amount}`);
+        }, 0);
+        totalIncome.innerHTML = `${currenttotal}`;
+        // console.log(currenttotal);
+    
+    
+        totalExpense.innerHTML = "";
+        const expensearr = data.filter((ele) => {
+          if (`${ele.source}` === expense.value) {
+            return true;
+          }
+        });
+        const expensetotal = expensearr.reduce((sum, ele) => {
+            return sum + parseInt(`${ele.amount}`);
+        }, 0);
+        totalExpense.innerHTML = `${expensetotal}`;
+    
+        // console.log(expensetotal);
+    
+        netBalance.innerHTML="";
+
+        const netbalance = currenttotal - expensetotal;
+        netBalance.innerHTML = `${netbalance}`;
+     }
+     updateincome();
+  resetForm();
+};
 
 //! reset form after creating one entry
- 
-const resetForm = ()=>{
-    discrptionInput.value= "";
-    amountInput.value= "";
-}
+
+const resetForm = () => {
+  discrptionInput.value = "";
+  amountInput.value = "";
+};
 
 //! clearing empty object from localstorage
 
-(()=>{
-    data = JSON.parse(localStorage.getItem("data")) || []
-    createList();
-})
-();
+(() => {
+  data = JSON.parse(localStorage.getItem("data")) || [];
+  createList();
+})();
 
 //! edit task function for created list
 
-const editTask = (e)=>{
-    let result = e.parentElement.parentElement;
-    discrptionInput.value = result.children[0].innerHTML;
-    amountInput.value = result.children[1].innerHTML;
-    sourceInput.value = result.children[2].innerHTML;
-    deleteTask(e)
-}
+const editTask = (e) => {
+  let result = e.parentElement.parentElement;
+  discrptionInput.value = result.children[0].innerHTML;
+  amountInput.value = result.children[1].innerHTML;
+  sourceInput.value = result.children[2].innerHTML;
+  deleteTask(e);
+  updateincome(e);
+
+};
 
 //! delete task for created list
 
-const deleteTask = (e)=>{
-    e.parentElement.parentElement.remove();
-    data.splice(e.parentElement.parentElement.id,1)
-    localStorage.setItem("data",JSON.stringify(data))
+const deleteTask = (e) => {
+  e.parentElement.parentElement.remove();
+  data.splice(e.parentElement.parentElement.id, 1);
+  localStorage.setItem("data", JSON.stringify(data));
+};
+
+//! total income
+
+/*
+const updateincome = ()=>{
+if(sourceInput.value===income.value){
+    const currenttotal = data.reduce((sum,ele)=>{
+        return (sum+(parseInt(`${ele.amount}`)))
+    },0);
+    totalIncome.innerHTML=`${currenttotal}`;
+    
+    // console.log(currenttotal);
 }
+
+    
+}
+*/
+/*
+
+data.forEach((element) =>{
+    const sum =data.reduce((sum,element)=>{
+    return sum+element.amount
+    } ) ;
+    console.log(sum);
+    
+})
+
+for (let key in data){
+    console.log(data[key]);
+    data  
+}
+
+*/
