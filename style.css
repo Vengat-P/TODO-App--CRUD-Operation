@@ -3,6 +3,3 @@
     font-family: "Volkhov", serif;
 }
 
-.container::-webkit-scrollbar{
-    width: 0 !important ;
-}

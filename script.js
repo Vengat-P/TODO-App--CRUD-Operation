@@ -56,54 +56,54 @@ const getData = () => {
 //! create function for getting data from local storage
 
 const createList = () => {
+  allFilter.checked = true;
   trackList.innerHTML = "";
   data.map((ele, i) => {
     return (trackList.innerHTML += `
-            <div id=${i} class="w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
+            <div id=${i} class=" w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
             <span class="font-bold text-start capitalize text-sky-900">${ele.discrption}</span>
             <span class="font-bold text-start ">${ele.amount}</span>
             <p class="font-bold text-start capitalize text-sky-900">${ele.source}</p>
             <span class="option flex flex-col gap-2 py-2 mt-2 mx-2">
             <i onclick="editTask(this)" class="fa-regular fa-pen-to-square"></i>
-            <i onclick="deleteTask(this); createlist(); updateincome();" class="fa-solid fa-trash"></i>
+            <i onclick="deleteTask(this); " class="fa-solid fa-trash"></i>
             </span>
             </div>
             `);
   });
+  // update totals
+  const updateincome = () => {
+    totalIncome.innerHTML = "";
+    const incomearr = data.filter((ele) => {
+      if (`${ele.source}` === income.value) {
+        return true;
+      }
+    });
+    const currenttotal = incomearr.reduce((sum, ele) => {
+      return sum + parseInt(`${ele.amount}`);
+    }, 0);
+    totalIncome.innerHTML = `${currenttotal}`;
+    // console.log(currenttotal);
 
-     const updateincome = ()=>{
-        totalIncome.innerHTML = "";
-        const incomearr = data.filter((ele) => {
-          if (`${ele.source}` === income.value) {
-            return true;
-          }
-        });
-        const currenttotal = incomearr.reduce((sum, ele) => {
-            return sum + parseInt(`${ele.amount}`);
-        }, 0);
-        totalIncome.innerHTML = `${currenttotal}`;
-        // console.log(currenttotal);
-    
-    
-        totalExpense.innerHTML = "";
-        const expensearr = data.filter((ele) => {
-          if (`${ele.source}` === expense.value) {
-            return true;
-          }
-        });
-        const expensetotal = expensearr.reduce((sum, ele) => {
-            return sum + parseInt(`${ele.amount}`);
-        }, 0);
-        totalExpense.innerHTML = `${expensetotal}`;
-    
-        // console.log(expensetotal);
-    
-        netBalance.innerHTML="";
+    totalExpense.innerHTML = "";
+    const expensearr = data.filter((ele) => {
+      if (`${ele.source}` === expense.value) {
+        return true;
+      }
+    });
+    const expensetotal = expensearr.reduce((sum, ele) => {
+      return sum + parseInt(`${ele.amount}`);
+    }, 0);
+    totalExpense.innerHTML = `${expensetotal}`;
 
-        const netbalance = currenttotal - expensetotal;
-        netBalance.innerHTML = `${netbalance}`;
-     }
-     updateincome();
+    // console.log(expensetotal);
+
+    netBalance.innerHTML = "";
+
+    const netbalance = currenttotal - expensetotal;
+    netBalance.innerHTML = `${netbalance}`;
+  };
+  updateincome();
   resetForm();
 };
 
@@ -129,8 +129,6 @@ const editTask = (e) => {
   amountInput.value = result.children[1].innerHTML;
   sourceInput.value = result.children[2].innerHTML;
   deleteTask(e);
-  updateincome(e);
-
 };
 
 //! delete task for created list
@@ -140,9 +138,90 @@ const deleteTask = (e) => {
   data.splice(e.parentElement.parentElement.id, 1);
   localStorage.setItem("data", JSON.stringify(data));
 };
+//!show all datas
+allFilter.addEventListener("click", () => {
+  trackList.innerHTML = "";
+  data.map((ele, i) => {
+    return (trackList.innerHTML += `
+             <div id=${i} class=" w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
+             <span class="font-bold text-start capitalize text-sky-900">${ele.discrption}</span>
+             <span class="font-bold text-start ">${ele.amount}</span>
+             <p class="font-bold text-start capitalize text-sky-900">${ele.source}</p>
+             <span class="option flex flex-col gap-2 py-2 mt-2 mx-2">
+             <i onclick="editTask(this)" class="fa-regular fa-pen-to-square"></i>
+             <i onclick="deleteTask(this); createlist();" class="fa-solid fa-trash"></i>
+             </span>
+             </div>
+             `);
+  });
+});
 
-//! total income
+//! showincome only
+incomeFilter.addEventListener("click", () => {
+  trackList.innerHTML = "";
+  data.filter((ele, i) => {
+    if (`${ele.source}` === income.value)
+      return (trackList.innerHTML += `
+            <div id=${i} class="w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
+            <span class="font-bold text-start capitalize text-sky-900">${ele.discrption}</span>
+            <span class="font-bold text-start ">${ele.amount}</span>
+            <p class="font-bold text-start capitalize text-sky-900">${ele.source}</p>
+            <span class="option flex flex-col gap-2 py-2 mt-2 mx-2">
+            <i onclick="editTask(this)" class="fa-regular fa-pen-to-square"></i>
+            <i onclick="deleteTask(this);" class="fa-solid fa-trash"></i>
+            </span>
+            </div>
+            `);
+  });
+});
+//! showincome expense only
+expenseFilter.addEventListener("click", () => {
+  trackList.innerHTML = "";
+  data.map((ele, i) => {
+    if (`${ele.source}` === expense.value)
+      return (trackList.innerHTML += `
+            <div id=${i} class="w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
+            <span class="font-bold text-start capitalize text-sky-900">${ele.discrption}</span>
+            <span class="font-bold text-start ">${ele.amount}</span>
+            <p class="font-bold text-start capitalize text-sky-900">${ele.source}</p>
+            <span class="option flex flex-col gap-2 py-2 mt-2 mx-2">
+            <i onclick="editTask(this)" class="fa-regular fa-pen-to-square"></i>
+            <i onclick="deleteTask(this);" class="fa-solid fa-trash"></i>
+            </span>
+            </div>
+            `);
+  });
+});
 
+
+
+
+/*
+const showincome=()=>{
+  
+ } 
+ showincome()
+*/
+
+/*
+const showincome = ()=>{
+
+  data.filter((ele, i) => {
+    if(`${ele.source}`===income.value)
+    return (trackList.innerHTML += `
+            <div id=${i} class="base  w-64 lg:w-80 mt-2 mb-2 flex justify-between bg-white/70 border-3 border-sky-900 rounded-lg">
+            <span class="font-bold text-start capitalize text-sky-900">${ele.discrption}</span>
+            <span class="font-bold text-start ">${ele.amount}</span>
+            <p class="font-bold text-start capitalize text-sky-900">${ele.source}</p>
+            <span class="option flex flex-col gap-2 py-2 mt-2 mx-2">
+            <i onclick="editTask(this)" class="fa-regular fa-pen-to-square"></i>
+            <i onclick="deleteTask(this); createlist();" class="fa-solid fa-trash"></i>
+            </span>
+            </div>
+            `);
+  });
+}
+  */
 /*
 const updateincome = ()=>{
 if(sourceInput.value===income.value){
