@@ -38,7 +38,6 @@ form.addEventListener("submit", (e) => {
 //! getting datas from input feild and stored it in array of object
 
 let data = [{}];
-
 const getData = () => {
   data.push({
     discrption: discrptionInput.value,
@@ -50,7 +49,6 @@ const getData = () => {
 
   localStorage.setItem("data", JSON.stringify(data));
   createList();
-  // updateincome()
 };
 
 //! create function for getting data from local storage
@@ -73,6 +71,7 @@ const createList = () => {
   });
   //! update totals
   const updateincome = () => {
+    // total income
     totalIncome.innerHTML = "";
     const incomearr = data.filter((ele) => {
       if (`${ele.source}` === income.value) {
@@ -84,7 +83,7 @@ const createList = () => {
     }, 0);
     totalIncome.innerHTML = `${currenttotal}`;
     // console.log(currenttotal);
-
+    // total expense
     totalExpense.innerHTML = "";
     const expensearr = data.filter((ele) => {
       if (`${ele.source}` === expense.value) {
@@ -97,7 +96,7 @@ const createList = () => {
     totalExpense.innerHTML = `${expensetotal}`;
 
     // console.log(expensetotal);
-
+    //net balance
     netBalance.innerHTML = "";
 
     const netbalance = currenttotal - expensetotal;
